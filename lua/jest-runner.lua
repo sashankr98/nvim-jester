@@ -9,6 +9,10 @@ local function is_valid_jest_file(buf_name)
 	vim.regex("^.*test\\.[tj]s$"):match_str(buf_name)
 end
 
+local AUGROUP = "JesterCommands"
+local TESTS = "tests"
+local TEXT_DOC_SYMBOL_METHOD = "textDocument/documentSymbol"
+
 M.get_test_name = function(str)
 	local keywords = {
 		"describe",
@@ -35,23 +39,31 @@ M.test_file = function()
 end
 
 M.get_ns_id = function()
-	local ns_id = vim.b.jest_ns_id
+	local ns_id = vim.g.jest_ns_id
 
 	if not ns_id then
-		ns_id = api.nvim_create_namespace(constants.namespace)
-		vim.b.jest_ns_id = ns_id
+		ns_id = api.nvim_create_namespace(constants.name)
+		vim.g.jest_ns_id = ns_id
 	end
 
 	return ns_id
 end
 
-M.highlight_tests = function()
+M.highlight_tests = function(bufnr)
 	local ns_id = M.get_ns_id()
-	api.nvim_buf_clear_namespace(0, ns_id, 1, -1)
+	api.nvim_buf_clear_namespace(bufnr, ns_id, 1, -1)
 
-	-- Possibly pass winnr and bufnr as params
-	-- What does make position params do?
-	lsp.buf_request(0, "textDocument/documentSymbol", lsp.util.make_position_params(0), function(err, result, _, _)
+    -- Find any client that supports textDocument/documentSymbol 
+    local client = lsp.get_clients({
+        bufnr = bufnr,
+        method = TEXT_DOC_SYMBOL_METHOD,
+    })[1]
+
+    if not client then
+        api.nvim_out_write("No valid client")
+        return
+    end
+    local handler = function (err, result, _, _)
 		if err then
 			vim.api.nvim_err_writeln("Error when finding document symbols: " .. err.message)
 			return
@@ -61,33 +73,64 @@ M.highlight_tests = function()
 			vim.api.nvim_out_write("No results from textDocument/documentSymbol")
 			return
 		end
-		local locations = lsp.util.symbols_to_items(result, 0)
-		local functions = {}
+		local locations = lsp.util.symbols_to_items(result, bufnr)
+		local tests = {}
 
 		for _, item in ipairs(locations) do
 			if item.kind == "Function" then
 				local test_name = M.get_test_name(item.text)
 				if test_name then
-					local extmark = api.nvim_buf_set_extmark(0, ns_id, item.lnum - 1, 0, {
+					local extmark = api.nvim_buf_set_extmark(bufnr, ns_id, item.lnum - 1, 0, {
 						sign_text = "",
 						-- Use different highlight group
 						sign_hl_group = "Label",
 					})
 					item.text = test_name
 					item.extmark = extmark
-					table.insert(functions, item)
+					table.insert(tests, item)
 				end
 			end
 		end
-		vim.b.fns = functions
-	end)
+        -- TODO: Ensure highlight is executed only once
+        if vim.b.hl_count == nil then
+            vim.b.hl_count = 1
+        else
+            vim.b.hl_count = vim.b.hl_count + 1
+        end
+        api.nvim_buf_set_var(bufnr, TESTS, tests)
+    end
+
+	-- Possibly pass winnr and bufnr as params
+    client.request(TEXT_DOC_SYMBOL_METHOD, lsp.util.make_position_params(), handler, bufnr)
 end
 
--- M.highlight_tests()
+M.is_jest_available = function()
+	return fn.findfile(constants.jest) ~= "" and true or false
+end
+
+local setup_autocommands = function()
+	api.nvim_create_augroup(AUGROUP, { clear = true })
+
+	local test_file_pattern = { "*.test.ts" }
+
+	api.nvim_create_autocmd({ "BufReadPost", "LspAttach" }, {
+		group = AUGROUP,
+		pattern = test_file_pattern,
+		once = false,
+		callback = function(ev)
+            vim.schedule(function ()
+                if vim.b.tests == nil then
+                    M.highlight_tests(ev.buf)
+                end
+            end)
+		end,
+	})
+end
 
 M.setup = function()
-	local jest_util_path = fn.findfile(constants.jest)
-	vim.g.jest_available = jest_util_path ~= "" and true or false
+	if  M.is_jest_available() then
+        setup_autocommands()
+	end
 end
 
 return M

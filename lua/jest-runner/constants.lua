@@ -1,4 +1,4 @@
 return {
-    namespace = "jester",
+    name = "jester",
     jest = "node_modules/.bin/jest",
 }
