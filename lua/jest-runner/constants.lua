@@ -1,4 +1,5 @@
 return {
-    name = "jester",
-    jest = "node_modules/.bin/jest",
+    augroup = "JESTER",
+    namespace = "JESTER",
+    jest_path = "node_modules/.bin/jest",
 }
