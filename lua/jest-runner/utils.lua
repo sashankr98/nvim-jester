@@ -1,7 +1,8 @@
-local constants = require("jest-runner.constants")
+local Config = require("jest-runner.config")
 
 local api = vim.api
 local fn = vim.fn
+local config = Config.config
 
 local M = {}
 
@@ -12,7 +13,7 @@ end
 M.err_writeln = api.nvim_err_writeln
 
 M.is_jest_available = function()
-	return fn.findfile(constants.jest_path) ~= "" and true or false
+	return fn.findfile(config.command) ~= "" and true or false
 end
 
 M.is_valid_jest_file = function(buf_name)
@@ -20,22 +21,18 @@ M.is_valid_jest_file = function(buf_name)
 end
 
 M.get_ns_id = function()
-	local ns_id = vim.g.jest_ns_id
+    local namespace = "Jester"
+	local ns_id = api.nvim_get_namespaces()[namespace]
 
 	if not ns_id then
-		ns_id = api.nvim_create_namespace(constants.namespace)
-		vim.g.jest_ns_id = ns_id
+		ns_id = api.nvim_create_namespace(namespace)
 	end
 
 	return ns_id
 end
 
 M.get_test_name = function(str)
-	local keywords = {
-		"describe",
-		"it",
-		"test",
-	}
+    local keywords = config.keywords
 	for _, kw in ipairs(keywords) do
 		local _, name = string.match(str, "^.*(" .. kw .. ").*%([\"'`](.*)[\"'`].*$")
 		if name ~= nil then

@@ -1,8 +1,9 @@
-local constants = require("jest-runner.constants")
+local Config = require("jest-runner.config")
 local utils = require("jest-runner.utils")
 
 local fn = vim.fn
 local api = vim.api
+local config = Config.config
 
 local SPACE = " "
 
@@ -75,7 +76,7 @@ M.execute_test = function()
 	end
 
 	local cmd = {
-		constants.jest_path,
+		config.command,
 		file,
 		"--testNamePattern=" .. '"' .. test_name .. '"',
 	}
@@ -95,7 +96,7 @@ M.execute_test_file = function()
 	end
 
 	local cmd = {
-		constants.jest_path,
+		config.command,
 		file,
 	}
 	execute_cmd_in_win(cmd, file)
