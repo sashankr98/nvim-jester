@@ -5,7 +5,7 @@ local utils = require("jest-runner.utils")
 local M = {}
 
 --- @type table<string, function>
-local command_functions = {
+M.command_functions = {
     previous_test = highlight.previous_test,
     next_test = highlight.next_test,
     execute_test = tester.execute_test,
@@ -17,7 +17,7 @@ M.run_command = function (cmd)
         return
     end
 
-    local fn = command_functions[cmd]
+    local fn = M.command_functions[cmd]
     if not fn then
         utils.err_writeln("Invalid command")
     end

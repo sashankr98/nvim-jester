@@ -13,7 +13,7 @@ end
 M.err_writeln = api.nvim_err_writeln
 
 M.is_jest_available = function()
-	return fn.findfile(config.command) ~= "" and true or false
+	return fn.executable(config.command) == 1 and true or false
 end
 
 M.is_valid_jest_file = function(buf_name)
