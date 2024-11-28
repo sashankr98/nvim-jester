@@ -1,5 +1,5 @@
-local Config = require("jest-runner.config")
-local utils = require("jest-runner.utils")
+local Config = require("nvim-jester.config")
+local utils = require("nvim-jester.utils")
 
 local fn = vim.fn
 local api = vim.api
@@ -79,11 +79,12 @@ M.execute_test = function()
 		config.command,
 		file,
 		"--testNamePattern=" .. '"' .. test_name .. '"',
+        "--runInBand"
 	}
 	execute_cmd_in_win(cmd, test_name)
 end
 
-M.execute_test_file = function()
+M.execute_test_buffer = function()
     if not utils.is_jest_available() then
         utils.err_writeln("Jest not available")
         return

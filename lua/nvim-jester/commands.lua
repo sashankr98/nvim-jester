@@ -1,6 +1,6 @@
-local highlight = require("jest-runner.highlight")
-local tester = require("jest-runner.tester")
-local utils = require("jest-runner.utils")
+local highlight = require("nvim-jester.highlight")
+local tester = require("nvim-jester.tester")
+local utils = require("nvim-jester.utils")
 
 local M = {}
 
@@ -9,7 +9,7 @@ M.command_functions = {
     previous_test = highlight.previous_test,
     next_test = highlight.next_test,
     execute_test = tester.execute_test,
-    execute_test_file = tester.execute_test_file,
+    execute_test_buffer = tester.execute_test_buffer,
 }
 
 M.run_command = function (cmd)

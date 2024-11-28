@@ -1,4 +1,4 @@
-local Config = require("jest-runner.config")
+local Config = require("nvim-jester.config")
 
 local api = vim.api
 local fn = vim.fn

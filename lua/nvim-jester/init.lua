@@ -1,7 +1,7 @@
-local Config = require("jest-runner.config")
-local highlight = require("jest-runner.highlight")
-local commands = require("jest-runner.commands")
-local utils = require("jest-runner.utils")
+local Config = require("nvim-jester.config")
+local highlight = require("nvim-jester.highlight")
+local commands = require("nvim-jester.commands")
+local utils = require("nvim-jester.utils")
 
 local api = vim.api
 

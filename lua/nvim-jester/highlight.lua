@@ -1,5 +1,5 @@
-local Config = require("jest-runner.config")
-local utils = require("jest-runner.utils")
+local Config = require("nvim-jester.config")
+local utils = require("nvim-jester.utils")
 
 local lsp = vim.lsp
 local api = vim.api

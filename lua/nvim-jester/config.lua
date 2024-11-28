@@ -47,6 +47,7 @@ local validate_config = function(config)
 end
 
 M.build = function(user_config)
+    user_config = user_config or {}
 	validate_config(user_config)
 
 	for k, v in pairs(user_config) do
