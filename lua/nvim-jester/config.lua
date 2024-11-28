@@ -1,5 +1,7 @@
 --- @class Jester.Config
 --- @field command string
+--- @field config_path string
+--- @field cli_options string[]
 --- @field file_patterns string[]
 --- @field keywords string[]
 --- @field sign_text string
@@ -10,6 +12,10 @@ local M = {}
 --- @type Jester.Config
 M.defaults = {
 	command = "node_modules/.bin/jest",
+    config_path = "jest.config.ts",
+    cli_options = {
+        "--runInBand",
+    },
 	file_patterns = {
 		"*.test.ts",
 		"*.spec.ts",
