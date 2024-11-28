@@ -54,6 +54,8 @@ end
 
 M.build = function(user_config)
     user_config = user_config or {}
+    user_config.command = nil
+
 	validate_config(user_config)
 
 	for k, v in pairs(user_config) do

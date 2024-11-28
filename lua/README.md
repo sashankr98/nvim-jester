@@ -29,7 +29,10 @@ the default settings:
 
 ```lua
 require("nvim-jester").setup({
-  command = "node_modules/.bin/jest", -- Used to execute tests
+  config_path = "jest.config.ts", -- Path to jest config
+  cli_options = { -- Additional cli options to run when executing tests. https://jestjs.io/docs/cli
+    "--runInBand",
+  },
   file_patterns = { -- Test highlighting and execution will be supported for these file patterns
     "*.test.ts",
     "*.spec.ts",
@@ -66,3 +69,6 @@ Example:
 :Jester execute_test_buffer
 ```
 
+## TODOs
+
+- Support passing cli options to the "execute_test" commands
