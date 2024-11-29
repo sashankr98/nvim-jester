@@ -13,7 +13,10 @@ end
 M.err_writeln = api.nvim_err_writeln
 
 M.is_jest_available = function()
-	return fn.findfile(config.command) ~= "" and true or false
+	if fn.findfile(config.command) ~= "" then
+		return true
+	end
+	return false
 end
 
 M.is_valid_jest_file = function(buf_name)
@@ -21,7 +24,7 @@ M.is_valid_jest_file = function(buf_name)
 end
 
 M.get_ns_id = function()
-    local namespace = "Jester"
+	local namespace = "Jester"
 	local ns_id = api.nvim_get_namespaces()[namespace]
 
 	if not ns_id then
@@ -32,7 +35,7 @@ M.get_ns_id = function()
 end
 
 M.get_test_name = function(str)
-    local keywords = config.keywords
+	local keywords = config.keywords
 	for _, kw in ipairs(keywords) do
 		local _, name = string.match(str, "^.*(" .. kw .. ").*%([\"'`](.*)[\"'`].*$")
 		if name ~= nil then

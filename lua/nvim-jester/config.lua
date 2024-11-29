@@ -1,7 +1,7 @@
 --- @class Jester.Config
 --- @field command string
 --- @field config_path string
---- @field cli_options string[]
+--- @field run_in_band boolean
 --- @field file_patterns string[]
 --- @field keywords string[]
 --- @field sign_text string
@@ -12,10 +12,8 @@ local M = {}
 --- @type Jester.Config
 M.defaults = {
 	command = "node_modules/.bin/jest",
-    config_path = "jest.config.ts",
-    cli_options = {
-        "--runInBand",
-    },
+	config_path = "jest.config.ts",
+	run_in_band = true,
 	file_patterns = {
 		"*.test.ts",
 		"*.spec.ts",
@@ -53,8 +51,8 @@ local validate_config = function(config)
 end
 
 M.build = function(user_config)
-    user_config = user_config or {}
-    user_config.command = nil
+	user_config = user_config or {}
+	user_config.command = nil
 
 	validate_config(user_config)
 

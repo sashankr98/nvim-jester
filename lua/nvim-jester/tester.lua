@@ -11,23 +11,23 @@ local M = {}
 
 ---@param file string
 ---@param test_name? string
-local create_cmd = function (file, test_name)
-    local cmd = {
-        config.command,
-        file,
-    }
+local create_cmd = function(file, test_name)
+	local cmd = {
+		config.command,
+		file,
+	}
 
-    if fn.findfile(config.config_path) ~= "" then
-        table.insert(cmd, "--config=" .. '"' .. config.config_path .. '"')
-    end
-    if test_name then
-        table.insert(cmd, "--testNamePattern=" .. '"' .. test_name .. '"')
-    end
+	if fn.findfile(config.config_path) ~= "" then
+		table.insert(cmd, "--config=" .. '"' .. config.config_path .. '"')
+	end
+	if test_name then
+		table.insert(cmd, "--testNamePattern=" .. '"' .. test_name .. '"')
+	end
+	if config.run_in_band then
+		table.insert(cmd, "--runInBand")
+	end
 
-    for _, option in ipairs(config.cli_options) do
-        table.insert(cmd, option)
-    end
-    return cmd
+	return cmd
 end
 
 ---@param cmd string[]
@@ -78,10 +78,10 @@ local execute_cmd_in_win = function(cmd, title)
 end
 
 M.execute_test = function()
-    if not utils.is_jest_available() then
-        utils.err_writeln("Jest not available")
-        return
-    end
+	if not utils.is_jest_available() then
+		utils.err_writeln("Jest not available")
+		return
+	end
 
 	local file = fn.expand("%")
 	if not utils.is_valid_jest_file(file) then
@@ -101,10 +101,10 @@ M.execute_test = function()
 end
 
 M.execute_test_buffer = function()
-    if not utils.is_jest_available() then
-        utils.err_writeln("Jest not available")
-        return
-    end
+	if not utils.is_jest_available() then
+		utils.err_writeln("Jest not available")
+		return
+	end
 
 	local file = fn.expand("%")
 	if not utils.is_valid_jest_file(file) then

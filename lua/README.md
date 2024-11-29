@@ -30,9 +30,7 @@ the default settings:
 ```lua
 require("nvim-jester").setup({
   config_path = "jest.config.ts", -- Path to jest config
-  cli_options = { -- Additional cli options to run when executing tests. https://jestjs.io/docs/cli
-    "--runInBand",
-  },
+  run_in_band = true -- Sets the --runInBand option when executing tests. https://jestjs.io/docs/cli#--runinband
   file_patterns = { -- Test highlighting and execution will be supported for these file patterns
     "*.test.ts",
     "*.spec.ts",
@@ -43,7 +41,7 @@ require("nvim-jester").setup({
     "test",
   },
   sign_text = "", -- Used to set extmark signs for tests
-  sign_hl_group = "JesterDefault", -- used to highlight sign_text
+  sign_hl_group = "JesterDefault", -- Used to highlight sign_text
 })
 ```
 
@@ -71,4 +69,6 @@ Example:
 
 ## TODOs
 
-- Support passing cli options to the "execute_test" commands
+- Add support for other cli options.
+- Support passing cli options to the "execute_test" commands.
+- Support test debugging
