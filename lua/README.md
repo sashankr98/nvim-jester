@@ -29,6 +29,7 @@ the default settings:
 
 ```lua
 require("nvim-jester").setup({
+  command = "node_modules/.bin/jest", -- Jest CLI to use. Also accepts "npx jest"
   config_path = "jest.config.ts", -- Path to jest config
   run_in_band = true -- Sets the --runInBand option when executing tests. https://jestjs.io/docs/cli#--runinband
   file_patterns = { -- Test highlighting and execution will be supported for these file patterns

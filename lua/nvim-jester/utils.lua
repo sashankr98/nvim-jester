@@ -13,7 +13,8 @@ end
 M.err_writeln = api.nvim_err_writeln
 
 M.is_jest_available = function()
-	if fn.findfile(config.command) ~= "" then
+	if fn.findfile("package.json") ~= "" -- Only use jest when in a valid JS project
+        and (config.command == "npx jest" or fn.findfile(config.command) ~= "") then
 		return true
 	end
 	return false

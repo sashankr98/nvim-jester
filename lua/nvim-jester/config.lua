@@ -37,6 +37,17 @@ local validate_config = function(config)
 	end
 
 	-- Specific validations
+	if config.commnad then
+		vim.validate({
+			command = {
+				config.command,
+				function(cmd)
+					return cmd == "npx jest" or not not string.match(cmd, ".*/jest")
+				end,
+				"valid command",
+			},
+		})
+	end
 	if config.sign_text then
 		vim.validate({
 			sign_text = {
@@ -52,7 +63,6 @@ end
 
 M.build = function(user_config)
 	user_config = user_config or {}
-	user_config.command = nil
 
 	validate_config(user_config)
 
