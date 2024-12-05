@@ -14,9 +14,21 @@ This plugin was developed and tested using:
 - Neovim: v0.10.0
 - jest-cli: v29.7.0
 
-## Installation and Usage
+## Installation
 
-Install using a package manager of your choice.
+Install using a package manager of your choice such as [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+
+```lua
+{
+    "sashankr98/nvim-jester",
+    opts = {
+        command = "npx jest",
+    },
+}
+```
+
+## Usage
 
 To use the default configuraton, run:
 
