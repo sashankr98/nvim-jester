@@ -36,8 +36,7 @@ To use the default configuraton, run:
 require("nvim-jester").setup()
 ```
 
-Configuration can be passed to the setup function. Here is an example with most of
-the default settings:
+Configuration can be passed to the setup function. Here is an example with the default settings:
 
 ```lua
 require("nvim-jester").setup({
